@@ -170,7 +170,7 @@ Robot::Robot(std::istream& config)
     }
     else
     {
-        iVel->setVelocityMode();
+        //iVel->setVelocityMode(); deprecated
         iVel->getAxes(&velAxes);
     }
 
@@ -197,9 +197,12 @@ Robot::Robot(std::istream& config)
     vLimit = 2;
 
 }
-
+//
+//Modes are deprecated so this function is not needed anymore
 bool Robot::SetControlMode(int newMode)
 {
+    std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
+    /*
     if (controlMode == newMode)
     {
         return true;
@@ -233,7 +236,7 @@ bool Robot::SetControlMode(int newMode)
            break;
 
        }
-    }
+    }*/
 }
 
 bool Robot::GetJoints(std::ostream &positions)
