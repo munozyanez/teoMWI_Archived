@@ -73,5 +73,5 @@ private:
 
 };
 
-}
+} //end namespace MWI
 #endif // MIDDLEWAREINTERFACE_H
