@@ -201,8 +201,8 @@ Robot::Robot(std::istream& config)
 //Modes are deprecated so this function is not needed anymore
 bool Robot::SetControlMode(int newMode)
 {
-    std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
-    /*
+  /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
+    */
     if (controlMode == newMode)
     {
         return true;
@@ -236,7 +236,7 @@ bool Robot::SetControlMode(int newMode)
            break;
 
        }
-    }*/
+    }
 }
 
 bool Robot::GetJoints(std::ostream &positions)
@@ -262,9 +262,10 @@ bool Robot::GetJoints(std::ostream &positions)
     return true;
 }
 
-bool Robot::GetJoint(int encoderAxis, double& encoderValue)
+double Robot::GetJoint(int encoderAxis)
 {
 
+    double encoderValue;
     if (encoderAxis > encoderAxes)
     {
         std::cerr << "No such axis number" << std::endl;
@@ -273,7 +274,22 @@ bool Robot::GetJoint(int encoderAxis, double& encoderValue)
 
     iEnc->getEncoder(encoderAxis, &encoderValue);
 
-    return true;
+    return encoderValue;
+}
+
+double Robot::GetJointVelocity(int encoderAxis)
+{
+
+    double encoderVelocityValue;
+    if (encoderAxis > encoderAxes)
+    {
+        std::cerr << "No such axis number" << std::endl;
+        return false;
+    }
+
+    iEnc->getEncoderSpeed(encoderAxis, &encoderVelocityValue);
+
+    return encoderVelocityValue;
 }
 
 bool Robot::SetJointVel(int axis, double value)
@@ -314,7 +330,7 @@ bool Robot::SetJointVel(int axis, double value)
 
 }
 
-bool Robot::SetJointPos(int axis, double &value)
+bool Robot::SetJointPos(int axis, double value)
 {
 
     SetControlMode(1);

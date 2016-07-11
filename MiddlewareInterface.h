@@ -55,10 +55,11 @@ class Robot : MiddlewareInterface
 public:
     Robot(std::istream &config);
     bool GetJoints(std::ostream & positions);
-    bool GetJoint(int encoderAxis, double& encoderValue);
+    double GetJoint(int encoderAxis);
     bool SetJointVel(int axis, double value);
-    bool SetJointPos(int axis, double& value);
+    bool SetJointPos(int axis, double value);
     bool SetControlMode(int newMode);
+    double GetJointVelocity(int encoderAxis);
 private:
     yarp::os::Property robotOptions;
     yarp::dev::PolyDriver deviceDriver;
