@@ -276,7 +276,7 @@ bool Robot::GetJoint(int encoderAxis, double& encoderValue)
     return true;
 }
 
-bool Robot::SetJointVel(int axis, double &value)
+bool Robot::SetJointVel(int axis, double value)
 {
 
 

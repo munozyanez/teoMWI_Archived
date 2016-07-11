@@ -56,7 +56,7 @@ public:
     Robot(std::istream &config);
     bool GetJoints(std::ostream & positions);
     bool GetJoint(int encoderAxis, double& encoderValue);
-    bool SetJointVel(int axis, double& value);
+    bool SetJointVel(int axis, double value);
     bool SetJointPos(int axis, double& value);
     bool SetControlMode(int newMode);
 private:
