@@ -50,7 +50,7 @@ bool Port::Read(std::istream &indices, std::ostream& data)
     else
     {
 
-        while(indices>0)
+        while(indices)
         {
             indices >> index;
             std::cout << index << ", ";
