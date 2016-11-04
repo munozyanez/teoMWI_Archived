@@ -5,6 +5,8 @@ project(teoMWI)
 aux_source_directory(. teoMWI_SRCS)
 #INCLUDE_DIRECTORIES(.)
 
+find_package(YARP REQUIRED)
+
 FILE(GLOB_RECURSE teoMWI_INCLUDE_LIST ./*.h ./*.hpp)
 
 
