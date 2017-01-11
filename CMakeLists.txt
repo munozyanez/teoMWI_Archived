@@ -12,6 +12,7 @@ FILE(GLOB_RECURSE teoMWI_INCLUDE_LIST ./*.h ./*.hpp)
 
 ADD_LIBRARY(${PROJECT_NAME} STATIC ${teoMWI_SRCS} ${teoMWI_INCLUDE_LIST})
 
+target_link_libraries(teoMWI ${YARP_LIBRARIES})
 
 
 
