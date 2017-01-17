@@ -5,6 +5,8 @@
 
 #include<string>
 #include<iostream>
+#include <thread>
+
 #include <yarp/os/all.h>
 #include <yarp/dev/all.h>
 
@@ -71,6 +73,13 @@ private:
     int velAxes, posAxes;
     double vLimit;
     int controlMode; //1:pos, 2:vel
+
+    double encoderValue;
+
+
+    std::thread posThread;
+    std::thread velThread;
+
 
 };
 

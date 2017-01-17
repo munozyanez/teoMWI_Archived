@@ -1,5 +1,8 @@
 #include "MiddlewareInterface.h"
 
+void posFunction(int posParam);
+
+
 using namespace MWI;
 
 MiddlewareInterface::MiddlewareInterface()
@@ -20,7 +23,7 @@ bool Port::Setup(std::string portname)
     PortBuffer.open(yarpPortString+":i");
     if (PortBuffer.isClosed())
     {
-        std::cerr << "Can not open "<< yarpPortString+":i"  << std::endl;
+        std::cout << "Can not open "<< yarpPortString+":i"  << std::endl;
     }
     else
     {
@@ -96,7 +99,7 @@ bool Port::ReadAllData(std::ostream& data)
     onePortData = PortBuffer.read(false); //waiting data. TODO: manage wait.
     if (onePortData==NULL)
     {
-        std::cerr << "No data in " << yarpPortString << std::endl;
+        std::cout << "No data in " << yarpPortString << std::endl;
     }
     else
     {
@@ -119,7 +122,7 @@ bool Port::ShowAllData()
 
     if (onePortData==NULL)
     {
-        std::cerr << "No data in " << yarpPortString << std::endl;
+        std::cout << "No data in " << yarpPortString << std::endl;
     }
     else
     {
@@ -158,14 +161,14 @@ Robot::Robot(std::istream& config)
     deviceDriver.open(robotOptions);               //YARP multi-use driver with the given options
     if(!deviceDriver.isValid())
     {
-      std::cerr << "Not avilable: " << robotOptions.toString() << std::endl;
+      std::cout << "Not avilable: " << robotOptions.toString() << std::endl;
       deviceDriver.close();
       //return;
     }
 
     if ( ! deviceDriver.view(iVel) )
     {
-        std::cerr << "Velocity Control Not avilable." << std::endl;
+        std::cout << "Velocity Control Not avilable." << std::endl;
         velAxes = 0;
     }
     else
@@ -176,7 +179,7 @@ Robot::Robot(std::istream& config)
 
     if ( ! deviceDriver.view(iEnc) )
     {
-        std::cerr << "encoders Not avilable." << std::endl;
+        std::cout << "encoders Not avilable." << std::endl;
         encoderAxes=0;
     }
     else
@@ -186,7 +189,7 @@ Robot::Robot(std::istream& config)
     }
     if ( ! deviceDriver.view(iPos) )
     {
-        std::cerr << "Position Control Not avilable." << std::endl;
+        std::cout << "Position Control Not avilable." << std::endl;
         posAxes=0;
     }
     else
@@ -196,6 +199,14 @@ Robot::Robot(std::istream& config)
     }
     vLimit = 2;
 
+    SetControlMode(1);
+
+    SetControlMode(2);
+
+
+
+    //posThread = std::thread(posFunction, 1);
+
 }
 //
 //Modes are deprecated so this function is not needed anymore
@@ -203,12 +214,12 @@ bool Robot::SetControlMode(int newMode)
 {
   /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
     */
-    if (controlMode == newMode)
+  /*  if (controlMode == newMode)
     {
         return true;
     }
     else
-    {
+    {*/
        switch (newMode)
        {
        case 1:
@@ -218,7 +229,7 @@ bool Robot::SetControlMode(int newMode)
            }
            else
            {
-               std::cerr << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
+               std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            }
            break;
        case 2:
@@ -228,15 +239,15 @@ bool Robot::SetControlMode(int newMode)
            }
            else
            {
-               std::cerr << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
+               std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            }
            break;
        default:
-           std::cerr << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
+           std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            break;
 
        }
-    }
+   // }
 }
 
 bool Robot::GetJoints(std::ostream &positions)
@@ -245,7 +256,7 @@ bool Robot::GetJoints(std::ostream &positions)
 
     if (encoderAxes == 0)
     {
-        std::cerr << "encoderAxes = 0" << std::endl;
+        std::cout << "encoderAxes = 0" << std::endl;
         return false;
     }
 
@@ -265,10 +276,9 @@ bool Robot::GetJoints(std::ostream &positions)
 double Robot::GetJoint(int encoderAxis)
 {
 
-    double encoderValue;
     if (encoderAxis > encoderAxes)
     {
-        std::cerr << "No such axis number" << std::endl;
+        std::cout << "No such axis number" << std::endl;
         return false;
     }
 
@@ -283,7 +293,7 @@ double Robot::GetJointVelocity(int encoderAxis)
     double encoderVelocityValue;
     if (encoderAxis > encoderAxes)
     {
-        std::cerr << "No such axis number" << std::endl;
+        std::cout << "No such axis number" << std::endl;
         return false;
     }
 
@@ -296,10 +306,9 @@ bool Robot::SetJointVel(int axis, double value)
 {
 
 
-    SetControlMode(2);
     if (axis > velAxes)
     {
-        std::cerr << "No such axis number" << std::endl;
+        std::cout << "No such axis number" << std::endl;
         return false;
     }
 
@@ -333,10 +342,9 @@ bool Robot::SetJointVel(int axis, double value)
 bool Robot::SetJointPos(int axis, double value)
 {
 
-    SetControlMode(1);
     if (axis > posAxes)
     {
-        std::cerr << "No such axis number" << std::endl;
+        std::cout << "No such axis number" << std::endl;
         return false;
     }
 
@@ -348,6 +356,9 @@ bool Robot::SetJointPos(int axis, double value)
 }
 
 
+void posFunction(int posParam)
+{
 
+}
 
 
