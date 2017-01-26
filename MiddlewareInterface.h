@@ -60,6 +60,10 @@ public:
     bool SetJointPos(int axis, double value);
     bool SetControlMode(int newMode);
     double GetJointVelocity(int encoderAxis);
+    bool DefaultPosition();
+    bool Stop();
+
+
 private:
     yarp::os::Property robotOptions;
     yarp::dev::PolyDriver deviceDriver;
