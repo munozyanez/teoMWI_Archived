@@ -1,5 +1,8 @@
 #include "MiddlewareInterface.h"
 
+void posFunction(int posParam);
+
+
 using namespace MWI;
 
 MiddlewareInterface::MiddlewareInterface()
@@ -196,6 +199,14 @@ Robot::Robot(std::istream& config)
     }
     vLimit = 2;
 
+    SetControlMode(1);
+
+    SetControlMode(2);
+
+
+
+    //posThread = std::thread(posFunction, 1);
+
 }
 //
 //Modes are deprecated so this function is not needed anymore
@@ -203,12 +214,12 @@ bool Robot::SetControlMode(int newMode)
 {
   /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
     */
-    if (controlMode == newMode)
+  /*  if (controlMode == newMode)
     {
         return true;
     }
     else
-    {
+    {*/
        switch (newMode)
        {
        case 1:
@@ -236,7 +247,7 @@ bool Robot::SetControlMode(int newMode)
            break;
 
        }
-    }
+   // }
 }
 
 bool Robot::GetJoints(std::ostream &positions)
@@ -265,7 +276,6 @@ bool Robot::GetJoints(std::ostream &positions)
 double Robot::GetJoint(int encoderAxis)
 {
 
-    double encoderValue;
     if (encoderAxis > encoderAxes)
     {
         std::cout << "No such axis number" << std::endl;
@@ -296,7 +306,6 @@ bool Robot::SetJointVel(int axis, double value)
 {
 
 
-    SetControlMode(2);
     if (axis > velAxes)
     {
         std::cout << "No such axis number" << std::endl;
@@ -333,7 +342,6 @@ bool Robot::SetJointVel(int axis, double value)
 bool Robot::SetJointPos(int axis, double value)
 {
 
-    SetControlMode(1);
     if (axis > posAxes)
     {
         std::cout << "No such axis number" << std::endl;
@@ -359,6 +367,7 @@ bool Robot::DefaultPosition()
     }
     return true;
 
+<<<<<<< HEAD
 }
 
 bool Robot::Stop()
@@ -373,6 +382,11 @@ bool Robot::Stop()
     }
     return true;
 
+=======
+void posFunction(int posParam)
+{
+
+>>>>>>> a3b0ca4af2f009afd7fb7695bbbbfc6b6ce74d20
 }
 
 
