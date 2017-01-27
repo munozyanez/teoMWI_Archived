@@ -367,7 +367,6 @@ bool Robot::DefaultPosition()
     }
     return true;
 
-<<<<<<< HEAD
 }
 
 bool Robot::Stop()
@@ -382,11 +381,13 @@ bool Robot::Stop()
     }
     return true;
 
-=======
+
+}
+
+
 void posFunction(int posParam)
 {
 
->>>>>>> a3b0ca4af2f009afd7fb7695bbbbfc6b6ce74d20
 }
 
 
