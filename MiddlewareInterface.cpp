@@ -273,6 +273,34 @@ bool Robot::GetJoints(std::ostream &positions)
     return true;
 }
 
+bool Robot::GetJoints(std::vector<double> &positions)
+{
+    //double* encValuePtr;
+
+    if (encoderAxes == 0)
+    {
+        std::cout << "encoderAxes = 0" << std::endl;
+        return false;
+    }
+
+    //std::vector<double> encoders(encoderAxes);
+
+    positions.clear();
+    positions.resize(encoderAxes);
+
+    iEnc->getEncoders(&positions[0]);
+/*
+    for (int i=0; i<encoderAxes; i++)
+    {
+        positions.push_back(*encValuePtr);
+        encValuePtr++;
+
+    }
+
+*/
+    return true;
+}
+
 double Robot::GetJoint(int encoderAxis)
 {
 
