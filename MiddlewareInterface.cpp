@@ -315,6 +315,20 @@ double Robot::GetJoint(int encoderAxis)
     return encoderValue;
 }
 
+double Robot::GetJointVel(int encoderAxis)
+{
+    if (encoderAxis > encoderAxes)
+    {
+        std::cout << "No such axis number" << std::endl;
+        return false;
+    }
+
+    iEnc->getEncoderSpeed(encoderAxis, &encoderSpeed);
+
+    return encoderSpeed;
+
+}
+
 double Robot::GetJointVelocity(int encoderAxis)
 {
 

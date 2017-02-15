@@ -59,6 +59,7 @@ public:
     bool GetJoints(std::ostream & positions);
     bool GetJoints(std::vector<double> &positions);
     double GetJoint(int encoderAxis);
+    double GetJointVel(int encoderAxis);
     bool SetJointVel(int axis, double value);
     bool SetJointPos(int axis, double value);
     bool SetControlMode(int newMode);
@@ -79,7 +80,7 @@ private:
     double vLimit;
     int controlMode; //1:pos, 2:vel
 
-    double encoderValue;
+    double encoderValue, encoderSpeed;
 
 
     std::thread posThread;
