@@ -353,7 +353,7 @@ bool Robot::SetJointVel(int axis, double value)
         //std::cout << "No such axis number" << std::endl;
         return false;
     }
-    SetControlMode(2);
+    //SetControlMode(2);
     if(value>5)
     {
         //std::cout << "value>3:" << value << std::endl;
