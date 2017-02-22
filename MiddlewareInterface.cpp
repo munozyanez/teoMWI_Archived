@@ -149,23 +149,8 @@ bool Joint::SetPos(double)
     std::cout << "TODO";
 }
 
-Robot::Robot(std::istream& config)
+long Robot::Initialize()
 {
-    std::string name,value;
-    while(config >> name)
-    {
-        config >> value;
-        robotOptions.put(name,value);
-        std::cout << name << value;
-    }
-    deviceDriver.open(robotOptions);               //YARP multi-use driver with the given options
-    if(!deviceDriver.isValid())
-    {
-      std::cout << "Not avilable: " << robotOptions.toString() << std::endl;
-      deviceDriver.close();
-      //return;
-    }
-
     if ( ! deviceDriver.view(iVel) )
     {
         std::cout << "Velocity Control Not avilable." << std::endl;
@@ -197,15 +182,69 @@ Robot::Robot(std::istream& config)
         iPos->getAxes(&posAxes);
 
     }
-    vLimit = 20;
+    vLimit = 100;
 
     SetControlMode(1);
 
     SetControlMode(2);
 
 
+    return 0;
+
+}
+
+Robot::Robot(std::istream& config)
+{
+    //example
+
+    /*  //Robot teo right arm
+      //YARP device
+      std::stringstream robConfig;
+      robConfig << "device remote_controlboard" << " ";
+      //To what will be connected
+      robConfig << "remote /teo/rightArm" << " ";
+      //How will be called on YARP network
+      robConfig << "local /local/rightArm" << " ";
+      Robot(robConfig);*/
+    std::string name,value;
+    while(config >> name)
+    {
+        config >> value;
+        robotOptions.put(name,value);
+        std::cout << name << value;
+    }
+    deviceDriver.open(robotOptions);               //YARP multi-use driver with the given options
+    if(!deviceDriver.isValid())
+    {
+      std::cout << "Not avilable: " << robotOptions.toString() << std::endl;
+      deviceDriver.close();
+      //return;
+    }
+
+    Initialize();
+
 
     //posThread = std::thread(posFunction, 1);
+
+}
+
+Robot::Robot(std::string robotName, std::string limbName)
+{
+
+    robotOptions.put("device","remote_controlboard");
+    robotOptions.put("remote", "/"+robotName+"/"+limbName );
+    robotOptions.put("local","/local/"+limbName);
+
+    deviceDriver.open(robotOptions);               //YARP multi-use driver with the given options
+    if(!deviceDriver.isValid())
+    {
+      std::cout << "Not avilable: " << robotOptions.toString() << std::endl;
+      deviceDriver.close();
+      //return;
+    }
+
+    Initialize();
+
 
 }
 //
@@ -235,6 +274,7 @@ bool Robot::SetControlMode(int newMode)
        case 2:
            if (iVel->setVelocityMode())
            {
+               std::cout << "Velocity mode"<< std::endl;;
                controlMode=newMode;
            }
            else

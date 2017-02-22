@@ -56,6 +56,7 @@ class Robot : MiddlewareInterface
 {
 public:
     Robot(std::istream &config);
+    Robot(std::string robotName, std::string limbName);
     bool GetJoints(std::ostream & positions);
     bool GetJoints(std::vector<double> &positions);
     double GetJoint(int encoderAxis);
@@ -87,6 +88,7 @@ private:
     std::thread velThread;
 
 
+    long Initialize();
 };
 
 } //end namespace MWI
