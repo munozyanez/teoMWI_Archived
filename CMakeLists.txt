@@ -1,5 +1,7 @@
 project(teoMWI)
 
+add_definitions(-std=c++0x -DYARP_NO_DEPRECATED_WARNINGS=ON)
+
 
 # source files
 aux_source_directory(. teoMWI_SRCS)

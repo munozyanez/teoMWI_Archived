@@ -84,8 +84,8 @@ private:
     double encoderValue, encoderSpeed;
 
 
-    std::thread posThread;
-    std::thread velThread;
+    //std::thread posThread;
+    //std::thread velThread;
 
 
     long Initialize();
