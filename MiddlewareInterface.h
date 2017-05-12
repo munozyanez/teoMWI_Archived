@@ -19,6 +19,14 @@ class MiddlewareInterface
 {
 public:
     MiddlewareInterface();
+    long GetError() const;
+
+protected:
+    long error;
+
+private:
+    yarp::os::Network yarpNet;
+
 };
 
 
@@ -52,7 +60,7 @@ private:
 
 };
 
-class Robot : MiddlewareInterface
+class Robot : public MiddlewareInterface
 {
 public:
     Robot(std::istream &config);

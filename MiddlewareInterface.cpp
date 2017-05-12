@@ -7,7 +7,26 @@ using namespace MWI;
 
 MiddlewareInterface::MiddlewareInterface()
 {
+    //INITIALISE AND CHECK YARP
 
+    if ( !yarpNet.checkNetwork(2) )
+    {
+        std::cout << "[error] %s found no YARP network (try running \"yarp detect --write\")." << std::endl;
+        error = -1;
+    }
+    else
+    {
+        std::cout << "[success] YARP network found." << std::endl;
+        error = 0;
+
+    }
+
+
+}
+
+long MiddlewareInterface::GetError() const
+{
+    return error;
 }
 
 Port::Port(const std::string portname)
@@ -184,6 +203,13 @@ long Robot::Initialize()
     }
     vLimit = 100;
 
+    if ( (velAxes&&encoderAxes&&posAxes) == 0 )
+    {
+        error = -10;
+        std::cout << "Robot Not avilable. Error: " << error << std::endl;
+        return -1;
+
+    }
     SetControlMode(1);
 
     SetControlMode(2);
