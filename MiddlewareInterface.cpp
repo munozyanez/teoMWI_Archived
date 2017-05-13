@@ -420,36 +420,38 @@ bool Robot::SetJointVel(int axis, double value)
         return false;
     }
     //SetControlMode(2);
-    if(value>5)
-    {
-        //std::cout << "value>3:" << value << std::endl;
+    iVel->velocityMove(axis, value );
 
-        iVel->velocityMove(axis, std::min(value,vLimit) );
-    }
-    else if((value<=5) and (value >0))
-    {
-        //std::cout << "(value<=4) and (value >0)" << value << std::endl;
+//    if(value>5)
+//    {
+//        //std::cout << "value>3:" << value << std::endl;
 
-        iVel->velocityMove(axis, 5.0 );
-    }
-    else if((value<0) and (value >=-5))
-    {
-        //std::cout << "(value<0) and (value >=-4)" << value << std::endl;
+//        iVel->velocityMove(axis, std::min(value,vLimit) );
+//    }
+//    else if((value<=5) and (value >0))
+//    {
+//        //std::cout << "(value<=4) and (value >0)" << value << std::endl;
 
-        iVel->velocityMove(axis, -5.0 );
-    }
-    else if(value<-5)
-    {
-        //std::cout << "(value<-4)" << value << std::endl;
+//        iVel->velocityMove(axis, 5.0 );
+//    }
+//    else if((value<0) and (value >=-5))
+//    {
+//        //std::cout << "(value<0) and (value >=-4)" << value << std::endl;
 
-        iVel->velocityMove(axis, std::max(value,-vLimit) );
-    }
-    else if(value==0)
-    {
-        //std::cout << "(value==0)" << value << std::endl;
+//        iVel->velocityMove(axis, -5.0 );
+//    }
+//    else if(value<-5)
+//    {
+//        //std::cout << "(value<-4)" << value << std::endl;
 
-        iVel->velocityMove(axis, 0 );
-    }
+//        iVel->velocityMove(axis, std::max(value,-vLimit) );
+//    }
+//    else if(value==0)
+//    {
+//        //std::cout << "(value==0)" << value << std::endl;
+
+//        iVel->velocityMove(axis, 0 );
+//    }
 /*
     if (value <= vLimit)
     {
