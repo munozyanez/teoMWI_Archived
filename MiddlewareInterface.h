@@ -78,11 +78,13 @@ public:
     bool Stop();
 
 
+    bool SetJointVels(std::vector<double> &value);
+    bool SetJointPositions(std::vector<double> value);
 private:
     yarp::os::Property robotOptions;
     yarp::dev::PolyDriver deviceDriver;
     std::vector<Joint> joints;
-    yarp::dev::IVelocityControl *iVel;                 //Velocity controller
+    yarp::dev::IVelocityControl2 *iVel;                 //Velocity controller
     yarp::dev::IPositionControl2 *iPos;                 //position controller
     yarp::dev::IEncoders *iEnc;         //encoders
     int encoderAxes;

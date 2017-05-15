@@ -475,6 +475,18 @@ bool Robot::SetJointVel(int axis, double value)
 
 }
 
+bool Robot::SetJointVels(std::vector<double> & value)
+{
+    if (value.size() > velAxes)
+    {
+        //std::cout << "No such axis number" << std::endl;
+        return false;
+    }
+    //SetControlMode(2);
+    iVel->velocityMove(&value[0] );
+
+}
+
 bool Robot::SetJointPos(int axis, double value)
 {
 
@@ -487,6 +499,23 @@ bool Robot::SetJointPos(int axis, double value)
     SetControlMode(1);
 
     iPos->positionMove(axis, value );
+
+    return true;
+
+}
+
+bool Robot::SetJointPositions(std::vector<double> value)
+{
+
+    if (value.size() > posAxes)
+    {
+        std::cout << "No such axis number" << std::endl;
+        return false;
+    }
+
+    SetControlMode(1);
+
+    iPos->positionMove( &value[0] );
 
     return true;
 
