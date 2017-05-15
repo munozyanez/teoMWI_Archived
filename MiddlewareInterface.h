@@ -63,6 +63,7 @@ private:
 class Robot : public MiddlewareInterface
 {
 public:
+    Robot();
     Robot(std::istream &config);
     Robot(std::string robotName, std::string limbName);
     bool GetJoints(std::ostream & positions);

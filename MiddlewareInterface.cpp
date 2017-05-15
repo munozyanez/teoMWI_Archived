@@ -219,6 +219,11 @@ long Robot::Initialize()
 
 }
 
+Robot::Robot()
+{
+
+}
+
 Robot::Robot(std::istream& config)
 {
     //example
