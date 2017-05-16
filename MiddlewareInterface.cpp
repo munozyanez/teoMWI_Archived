@@ -179,6 +179,8 @@ long Robot::Initialize()
     {
         //iVel->setVelocityMode(); deprecated
         iVel->getAxes(&velAxes);
+        std::cout << "Velocity Control axes: " << velAxes << std::endl;
+
     }
 
     if ( ! deviceDriver.view(iEnc) )
@@ -189,6 +191,8 @@ long Robot::Initialize()
     else
     {
         iEnc->getAxes(&encoderAxes);
+        std::cout << "Encoder axes: " << encoderAxes << std::endl;
+
 
     }
     if ( ! deviceDriver.view(iPos) )
@@ -199,9 +203,13 @@ long Robot::Initialize()
     else
     {
         iPos->getAxes(&posAxes);
+        std::cout << "Position Control axes: " << posAxes << std::endl;
+
 
     }
     vLimit = 100;
+    std::cout << "Velocity limits: " << vLimit << std::endl;
+
 
     if ( (velAxes&&encoderAxes&&posAxes) == 0 )
     {
