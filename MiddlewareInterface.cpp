@@ -529,6 +529,7 @@ bool Robot::SetJointPositions(std::vector<double> value)
 
 }
 
+
 bool Robot::DefaultPosition()
 {
 

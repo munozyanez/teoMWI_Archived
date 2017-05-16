@@ -94,6 +94,8 @@ private:
 
     double encoderValue, encoderSpeed;
 
+    std::vector<double> actualQ;
+
 
     //std::thread posThread;
     //std::thread velThread;
