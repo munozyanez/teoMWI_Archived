@@ -168,7 +168,7 @@ bool Joint::SetPos(double)
     std::cout << "TODO";
 }
 
-long Robot::Initialize()
+long Limb::Initialize()
 {
     if ( ! deviceDriver.view(iVel) )
     {
@@ -186,12 +186,12 @@ long Robot::Initialize()
     if ( ! deviceDriver.view(iEnc) )
     {
         std::cout << "encoders Not avilable." << std::endl;
-        encoderAxes=0;
+        encAxes=0;
     }
     else
     {
-        iEnc->getAxes(&encoderAxes);
-        std::cout << "Encoder axes: " << encoderAxes << std::endl;
+        iEnc->getAxes(&encAxes);
+        std::cout << "Encoder axes: " << encAxes << std::endl;
 
 
     }
@@ -207,32 +207,58 @@ long Robot::Initialize()
 
 
     }
+
+    if ( ! deviceDriver.view(iTor) )
+    {
+        std::cout << "Torque Control Not avilable." << std::endl;
+        posAxes=0;
+    }
+    else
+    {
+        iTor->getAxes(&torAxes);
+        for (int i = 0; i<torAxes; i++)
+        {
+            std::cout << iTor->enableTorquePid(i);
+
+        }
+        std::cout << "Torque Control axes: " << torAxes << std::endl;
+
+
+    }
+
     vLimit = 100;
     std::cout << "Velocity limits: " << vLimit << std::endl;
 
 
-    if ( (velAxes&&encoderAxes&&posAxes) == 0 )
+    if ( (velAxes&&encAxes&&posAxes&&torAxes) == 0 )
     {
         error = -10;
         std::cout << "Robot Not avilable. Error: " << error << std::endl;
         return -1;
 
     }
-    SetControlMode(1);
+//    SetControlMode(1);
 
-    SetControlMode(2);
+//    SetControlMode(2);
+
+    actualQs.resize(encAxes);
+    targetQs.resize(encAxes);
+
+    actualTs.resize(torAxes);
+    targetTs.resize(torAxes);
+
 
 
     return 0;
 
 }
 
-Robot::Robot()
+Limb::Limb()
 {
 
 }
 
-Robot::Robot(std::istream& config)
+Limb::Limb(std::istream& config)
 {
     //example
 
@@ -267,7 +293,7 @@ Robot::Robot(std::istream& config)
 
 }
 
-Robot::Robot(std::string robotName, std::string limbName)
+Limb::Limb(std::string robotName, std::string limbName)
 {
 
     robotOptions.put("device","remote_controlboard");
@@ -288,7 +314,7 @@ Robot::Robot(std::string robotName, std::string limbName)
 }
 //
 //Modes are deprecated so this function is not needed anymore
-bool Robot::SetControlMode(int newMode)
+bool Limb::SetControlMode(int newMode)
 {
   /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
     */
@@ -321,6 +347,18 @@ bool Robot::SetControlMode(int newMode)
                std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            }
            break;
+       case 3:
+           if ( iTor->setTorqueMode() )
+           {
+               std::cout << "Torque mode"<< std::endl;;
+               controlMode=newMode;
+           }
+           else
+           {
+               std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
+           }
+           break;
+
        default:
            std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            break;
@@ -329,11 +367,11 @@ bool Robot::SetControlMode(int newMode)
    // }
 }
 
-bool Robot::GetJoints(std::ostream &positions)
+bool Limb::GetJoints(std::ostream &positions)
 {
     double* encValuePtr;
 
-    if (encoderAxes == 0)
+    if (encAxes == 0)
     {
         std::cout << "encoderAxes = 0" << std::endl;
         return false;
@@ -341,7 +379,7 @@ bool Robot::GetJoints(std::ostream &positions)
 
     iEnc->getEncoders(encValuePtr);
 
-    for (int i=0; i<encoderAxes; i++)
+    for (int i=0; i<encAxes; i++)
     {
         positions << *encValuePtr << " ";
         encValuePtr++;
@@ -352,11 +390,11 @@ bool Robot::GetJoints(std::ostream &positions)
     return true;
 }
 
-bool Robot::GetJoints(std::vector<double> &positions)
+bool Limb::GetJoints(std::vector<double> &positions)
 {
     //double* encValuePtr;
 
-    if (encoderAxes == 0)
+    if (encAxes == 0)
     {
         std::cout << "encoderAxes = 0" << std::endl;
         return false;
@@ -365,7 +403,7 @@ bool Robot::GetJoints(std::vector<double> &positions)
     //std::vector<double> encoders(encoderAxes);
 
     positions.clear();
-    positions.resize(encoderAxes);
+    positions.resize(encAxes);
 
     iEnc->getEncoders(&positions[0]);
 /*
@@ -380,10 +418,10 @@ bool Robot::GetJoints(std::vector<double> &positions)
     return true;
 }
 
-double Robot::GetJoint(int encoderAxis)
+double Limb::GetJoint(int encoderAxis)
 {
 
-    if (encoderAxis > encoderAxes)
+    if (encoderAxis > encAxes)
     {
         std::cout << "No such axis number" << std::endl;
         return false;
@@ -394,9 +432,9 @@ double Robot::GetJoint(int encoderAxis)
     return encoderValue;
 }
 
-double Robot::GetJointVel(int encoderAxis)
+double Limb::GetJointVel(int encoderAxis)
 {
-    if (encoderAxis > encoderAxes)
+    if (encoderAxis > encAxes)
     {
         std::cout << "No such axis number" << std::endl;
         return false;
@@ -408,11 +446,11 @@ double Robot::GetJointVel(int encoderAxis)
 
 }
 
-double Robot::GetJointVelocity(int encoderAxis)
+double Limb::GetJointVelocity(int encoderAxis)
 {
 
     double encoderVelocityValue;
-    if (encoderAxis > encoderAxes)
+    if (encoderAxis > encAxes)
     {
         std::cout << "No such axis number" << std::endl;
         return false;
@@ -423,7 +461,7 @@ double Robot::GetJointVelocity(int encoderAxis)
     return encoderVelocityValue;
 }
 
-bool Robot::SetJointVel(int axis, double value)
+bool Limb::SetJointVel(int axis, double value)
 {
 
 
@@ -483,7 +521,7 @@ bool Robot::SetJointVel(int axis, double value)
 
 }
 
-bool Robot::SetJointVels(std::vector<double> & value)
+bool Limb::SetJointVels(std::vector<double> & value)
 {
     if (value.size() > velAxes)
     {
@@ -495,7 +533,7 @@ bool Robot::SetJointVels(std::vector<double> & value)
 
 }
 
-bool Robot::SetJointPos(int axis, double value)
+bool Limb::SetJointPos(int axis, double value)
 {
 
     if (axis > posAxes)
@@ -512,7 +550,7 @@ bool Robot::SetJointPos(int axis, double value)
 
 }
 
-bool Robot::SetJointPositions(std::vector<double> value)
+bool Limb::SetJointPositions(std::vector<double> value)
 {
 
     if (value.size() > posAxes)
@@ -521,16 +559,43 @@ bool Robot::SetJointPositions(std::vector<double> value)
         return false;
     }
 
-    SetControlMode(1);
+    switch (controlMode)
+    {
+    case 2:
+        //vel position control
+        break;
+    case 3:
+        //acc control
+        for (int i=0; i<100; i++)
+        {
+            iEnc->getEncoders(&actualQs[0]);
 
-    iPos->positionMove( &value[0] );
+            targetQs = std::valarray<double>(value.data(), value.size());
+            errorQs=(targetQs-actualQs);
+            targetTs = 1.0*(errorQs);
+            if (errorQs.sum()<6)
+            {
+                return true;
+            }
+
+            iTor->setRefTorques(&targetTs[0]);
+
+        }
+
+        break;
+    default:
+
+        SetControlMode(1);
+        iPos->positionMove( &value[0] );
+        break;
+    }
 
     return true;
 
 }
 
 
-bool Robot::DefaultPosition()
+bool Limb::DefaultPosition()
 {
 
     SetControlMode(1);
@@ -544,7 +609,7 @@ bool Robot::DefaultPosition()
 
 }
 
-bool Robot::Stop()
+bool Limb::Stop()
 {
 
     SetControlMode(2);

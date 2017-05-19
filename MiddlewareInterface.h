@@ -10,6 +10,8 @@
 #include <yarp/os/all.h>
 #include <yarp/dev/all.h>
 
+#include <valarray>     // std::valarray
+
 namespace MWI
 {
 
@@ -60,12 +62,12 @@ private:
 
 };
 
-class Robot : public MiddlewareInterface
+class Limb : public MiddlewareInterface
 {
 public:
-    Robot();
-    Robot(std::istream &config);
-    Robot(std::string robotName, std::string limbName);
+    Limb();
+    Limb(std::istream &config);
+    Limb(std::string robotName, std::string limbName);
     bool GetJoints(std::ostream & positions);
     bool GetJoints(std::vector<double> &positions);
     double GetJoint(int encoderAxis);
@@ -86,15 +88,18 @@ private:
     std::vector<Joint> joints;
     yarp::dev::IVelocityControl2 *iVel;                 //Velocity controller
     yarp::dev::IPositionControl2 *iPos;                 //position controller
+    yarp::dev:: ITorqueControl *iTor;                 //Torque controller
+
     yarp::dev::IEncoders *iEnc;         //encoders
-    int encoderAxes;
-    int velAxes, posAxes;
+    int encAxes;
+    int velAxes, posAxes, torAxes;
     double vLimit;
-    int controlMode; //1:pos, 2:vel
+    int controlMode; //1:pos, 2:vel 3:acc
 
     double encoderValue, encoderSpeed;
 
-    std::vector<double> actualQ;
+    std::valarray<double> actualQs, targetQs, errorQs;
+    std::valarray<double> actualTs, targetTs;
 
 
     //std::thread posThread;
