@@ -82,6 +82,7 @@ public:
 
     bool SetJointVels(std::vector<double> &value);
     bool SetJointPositions(std::vector<double> value);
+    long ShowControlModes();
 private:
     yarp::os::Property robotOptions;
     yarp::dev::PolyDriver deviceDriver;
@@ -89,10 +90,12 @@ private:
     yarp::dev::IVelocityControl2 *iVel;                 //Velocity controller
     yarp::dev::IPositionControl2 *iPos;                 //position controller
     yarp::dev:: ITorqueControl *iTor;                 //Torque controller
+    yarp::dev::IControlMode2 *iMod;     //control mode set
 
     yarp::dev::IEncoders *iEnc;         //encoders
     int encAxes;
     int velAxes, posAxes, torAxes;
+    std::vector<int> controlModes;
     double vLimit;
     int controlMode; //1:pos, 2:vel 3:acc
 

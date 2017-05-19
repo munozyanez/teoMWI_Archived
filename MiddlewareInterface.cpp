@@ -170,6 +170,8 @@ bool Joint::SetPos(double)
 
 long Limb::Initialize()
 {
+
+
     if ( ! deviceDriver.view(iVel) )
     {
         std::cout << "Velocity Control Not avilable." << std::endl;
@@ -211,17 +213,34 @@ long Limb::Initialize()
     if ( ! deviceDriver.view(iTor) )
     {
         std::cout << "Torque Control Not avilable." << std::endl;
-        posAxes=0;
+        torAxes=0;
     }
     else
     {
         iTor->getAxes(&torAxes);
-        for (int i = 0; i<torAxes; i++)
+        std::cout << "Torque Control axes: " << torAxes << std::endl;
+
+
+    }
+
+
+    if ( ! deviceDriver.view(iMod) )
+    {
+        std::cout << "Mode Control Not avilable." << std::endl;
+        controlModes.clear();
+    }
+    else
+    {
+        for (int i = 0; i<posAxes; i++)
         {
-            std::cout << iTor->enableTorquePid(i);
+            int mode;
+            iMod->getControlMode(i,&mode);
+            controlModes.push_back(mode);
+
+            //iTor->enableTorquePid(i);
 
         }
-        std::cout << "Torque Control axes: " << torAxes << std::endl;
+        std::cout << "Actual Control Modes: " << controlModes << std::endl;
 
 
     }
@@ -240,7 +259,6 @@ long Limb::Initialize()
 //    SetControlMode(1);
 
 //    SetControlMode(2);
-
     actualQs.resize(encAxes);
     targetQs.resize(encAxes);
 
@@ -249,14 +267,31 @@ long Limb::Initialize()
 
 
 
+
     return 0;
 
+}
+
+long Limb::ShowControlModes()
+{
+    std::cout <<"Actual Control Modes: ";
+    for (int i = 0; i<torAxes; i++)
+    {
+        int mode;
+        iMod->getControlMode(i,&mode);
+        std::cout  << mode << ",";
+
+    }
+    std::cout << std::endl;
+    return 0;
 }
 
 Limb::Limb()
 {
 
 }
+
+
 
 Limb::Limb(std::istream& config)
 {
@@ -313,7 +348,6 @@ Limb::Limb(std::string robotName, std::string limbName)
 
 }
 //
-//Modes are deprecated so this function is not needed anymore
 bool Limb::SetControlMode(int newMode)
 {
   /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
@@ -329,6 +363,11 @@ bool Limb::SetControlMode(int newMode)
        case 1:
            if(iPos->setPositionMode())
            {
+               std::cout << "Position mode"<< std::endl;;
+               for (unsigned int joint = 0; joint < posAxes; joint++)
+               {
+                   iMod->setPositionMode(joint);
+               }
                controlMode=newMode;
            }
            else
@@ -350,7 +389,12 @@ bool Limb::SetControlMode(int newMode)
        case 3:
            if ( iTor->setTorqueMode() )
            {
+               //iMod->setControlMode(i);
                std::cout << "Torque mode"<< std::endl;;
+               for (unsigned int joint = 0; joint < posAxes; joint++)
+               {
+                   iMod->setTorqueMode(joint);
+               }
                controlMode=newMode;
            }
            else
@@ -566,19 +610,22 @@ bool Limb::SetJointPositions(std::vector<double> value)
         break;
     case 3:
         //acc control
-        for (int i=0; i<100; i++)
+        for (int i=0; i<200; i++)
         {
             iEnc->getEncoders(&actualQs[0]);
+            std::cout << "actualQs" << actualQs[3] << std::endl;
 
             targetQs = std::valarray<double>(value.data(), value.size());
             errorQs=(targetQs-actualQs);
             targetTs = 1.0*(errorQs);
-            if (errorQs.sum()<6)
-            {
-                return true;
-            }
+
+//            if (errorQs.sum()<6)
+//            {
+//                return true;
+//            }
 
             iTor->setRefTorques(&targetTs[0]);
+            yarp::os::Time::delay(0.01);
 
         }
 
