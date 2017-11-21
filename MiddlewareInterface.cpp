@@ -358,7 +358,7 @@ bool Limb::SetControlMode(int newMode)
     }
     else
     {*/
-       switch (newMode)
+ /*      switch (newMode)
        {
        case 1:
            if(iPos->setPositionMode())
@@ -407,7 +407,7 @@ bool Limb::SetControlMode(int newMode)
            std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            break;
 
-       }
+       }*/
    // }
 }
 
