@@ -352,42 +352,36 @@ bool Limb::SetControlMode(int newMode)
 {
   /*  std::cout << "Modes are deprecated so this function is not needed anymore" << std::endl;
     */
-  /*  if (controlMode == newMode)
+    if (controlMode == newMode)
     {
         return true;
     }
     else
-    {*/
- /*      switch (newMode)
+    {
+       switch (newMode)
        {
        case 1:
-           if(iPos->setPositionMode())
+
+           std::cout << "Position mode"<< std::endl;;
+           for (unsigned int joint = 0; joint < posAxes; joint++)
            {
-               std::cout << "Position mode"<< std::endl;;
-               for (unsigned int joint = 0; joint < posAxes; joint++)
-               {
-                   iMod->setPositionMode(joint);
-               }
-               controlMode=newMode;
+               iMod->setPositionMode(joint);
            }
-           else
-           {
-               std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
-           }
+           controlMode=newMode;
+
            break;
        case 2:
-           if (iVel->setVelocityMode())
+
+           std::cout << "Velocity mode"<< std::endl;;
+           for (unsigned int joint = 0; joint < posAxes; joint++)
            {
-               std::cout << "Velocity mode"<< std::endl;;
-               controlMode=newMode;
+               iMod->setVelocityMode(joint);
            }
-           else
-           {
-               std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
-           }
+           controlMode=newMode;
+
            break;
        case 3:
-           if ( iTor->setTorqueMode() )
+         /*  if ( iTor->setTorqueMode() )
            {
                //iMod->setControlMode(i);
                std::cout << "Torque mode"<< std::endl;;
@@ -402,13 +396,13 @@ bool Limb::SetControlMode(int newMode)
                std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            }
            break;
-
+*/
        default:
            std::cout << "Control mode not available. Keeping actual mode: " << controlMode << std::endl;
            break;
 
-       }*/
-   // }
+       }
+    }
 }
 
 bool Limb::GetJoints(std::ostream &positions)

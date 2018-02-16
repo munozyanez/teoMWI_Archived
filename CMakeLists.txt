@@ -1,6 +1,6 @@
 project(teoMWI)
 
-add_definitions(-std=c++0x -DYARP_NO_DEPRECATED_WARNINGS=ON)
+#add_definitions(-std=c++0x -DYARP_NO_DEPRECATED_WARNINGS=ON)
 
 
 # source files
