@@ -509,7 +509,8 @@ bool Limb::SetJointVel(int axis, double value)
         return false;
     }
     //SetControlMode(2);
-    iVel->velocityMove(axis, value );
+    //max vel set = 1000
+    iVel->velocityMove(axis, std::min(value,1000.0) );
 
 //    if(value>5)
 //    {
