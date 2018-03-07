@@ -365,7 +365,8 @@ bool Limb::SetControlMode(int newMode)
            std::cout << "Position mode"<< std::endl;;
            for (unsigned int joint = 0; joint < posAxes; joint++)
            {
-               iMod->setPositionMode(joint);
+               //iMod->setPositionMode(joint); -> deprecated
+               iMod->setControlMode(joint,VOCAB_CM_POSITION);
            }
            controlMode=newMode;
 
@@ -375,7 +376,8 @@ bool Limb::SetControlMode(int newMode)
            std::cout << "Velocity mode"<< std::endl;;
            for (unsigned int joint = 0; joint < posAxes; joint++)
            {
-               iMod->setVelocityMode(joint);
+               //iMod->setVelocityMode(joint); -> deprecated
+               iMod->setControlMode(joint,VOCAB_CM_VELOCITY);
            }
            controlMode=newMode;
 
