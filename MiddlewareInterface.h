@@ -78,6 +78,7 @@ public:
     double GetJointVelocity(int encoderAxis);
     bool DefaultPosition();
     bool Stop();
+    double GetCurrent(int encoderAxis);
 
 
     bool SetJointVels(std::vector<double> &value);
@@ -91,7 +92,7 @@ private:
     yarp::dev::IPositionControl2 *iPos;                 //position controller
     yarp::dev:: ITorqueControl *iTor;                 //Torque controller
     yarp::dev::IControlMode2 *iMod;     //control mode set
-
+    yarp::dev::ICurrentControl *iCurr;
     yarp::dev::IEncoders *iEnc;         //encoders
     int encAxes;
     int velAxes, posAxes, torAxes;

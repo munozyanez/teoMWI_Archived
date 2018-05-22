@@ -209,6 +209,14 @@ long Limb::Initialize()
 
 
     }
+    if ( ! deviceDriver.view(iCurr) )
+    {
+        std::cout << "Current Control Not avilable." << std::endl;
+    }
+    else
+    {
+        std::cout << "Current Control axes: "  << std::endl;
+    }
 
     if ( ! deviceDriver.view(iTor) )
     {
@@ -499,6 +507,21 @@ double Limb::GetJointVelocity(int encoderAxis)
     iEnc->getEncoderSpeed(encoderAxis, &encoderVelocityValue);
 
     return encoderVelocityValue;
+}
+
+double Limb::GetCurrent(int motorAxis)
+{
+
+    double motorCurrentValue;
+    if (motorAxis > encAxes)
+    {
+        std::cout << "No such axis number" << std::endl;
+        return false;
+    }
+
+    iCurr->getCurrent(motorAxis, &motorCurrentValue);
+
+    return motorCurrentValue;
 }
 
 bool Limb::SetJointVel(int axis, double value)
